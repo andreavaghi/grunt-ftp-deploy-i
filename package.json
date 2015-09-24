@@ -1,6 +1,6 @@
 {
-  "name": "grunt-ftp-deploy",
-  "description": "Deployment over FTP",
+  "name": "grunt-ftp-deploy-i",
+  "description": "Deployment over FTP - Improved",
   "version": "0.1.0",
   "homepage": "https://github.com/andreavaghi/grunt-ftp-deploy-i",
   "author": {
