@@ -91,5 +91,8 @@ This task is built by taking advantage of the great work of Sergi Mansilla and h
 [npm-url]: https://npmjs.org/package/grunt-ftp-deploy-i
 [npm-image]: https://badge.fury.io/js/grunt-ftp-deploy-i.png
 
-[travis-url]: http://travis-ci.org/zonak/grunt-ftp-deploy
-[travis-image]: https://secure.travis-ci.org/zonak/grunt-ftp-deploy.png?branch=master
+[travis-url]: http://travis-ci.org/andreavaghi/grunt-ftp-deploy-i
+[travis-image]: https://secure.travis-ci.org/andreavaghi/grunt-ftp-deploy-i.png?branch=master
+
+[depstat-url]: https://david-dm.org/andreavaghi/grunt-ftp-deploy-i
+[depstat-image]: https://david-dm.org/andreavaghi/grunt-ftp-deploy-i.png
