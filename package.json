@@ -1,7 +1,7 @@
 {
   "name": "grunt-ftp-deploy-i",
   "description": "Deployment over FTP - Improved",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/andreavaghi/grunt-ftp-deploy-i",
   "author": {
     "name": "Andrea Vaghi",
@@ -17,7 +17,8 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/andreavaghi/grunt-ftp-deploy-i/blob/master/LICENSE-MIT"
+      "url":
+        "https://github.com/andreavaghi/grunt-ftp-deploy-i/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
@@ -39,10 +40,5 @@
   "scripts": {
     "test": "grunt"
   },
-  "keywords": [
-    "gruntplugin",
-    "ftp",
-    "deploy",
-    "ftp-deploy"
-  ]
+  "keywords": ["gruntplugin", "ftp", "deploy", "ftp-deploy"]
 }
