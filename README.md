@@ -1,4 +1,6 @@
-# grunt-ftp-deploy [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+# grunt-ftp-deploy
+
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
 This is a grunt task for code deployment over the ftp protocol. It is mostly a copy of grunt-ftp-deploy, but add the possibility of setting the auth credentials from environment variables. And when I say "mostly a copy," I mean I stole it all and added this feature. Including this readme, for now.
 
