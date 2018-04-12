@@ -7,8 +7,7 @@
 // Dependencies: jsftp
 //
 
-module.exports = function (grunt) {
-
+module.exports = function(grunt) {
   grunt.util = grunt.util || grunt.utils;
 
   var async = require('async');
@@ -31,7 +30,7 @@ module.exports = function (grunt) {
   var forceVerbose;
 
   // A method for parsing the source location and storing the information into a suitably formated object
-  function dirParseSync (startDir, result) {
+  function dirParseSync(startDir, result) {
     var files;
     var i;
     var tmpPath;
@@ -52,7 +51,7 @@ module.exports = function (grunt) {
     files = fs.readdirSync(startDir);
     for (i = 0; i < files.length; i++) {
       currFile = startDir + path.sep + files[i];
-      if (!file.isMatch({matchBase: true}, exclusions, currFile)) {
+      if (!file.isMatch({ matchBase: true }, exclusions, currFile)) {
         if (file.isDir(currFile)) {
           tmpPath = path.relative(localRoot, startDir + path.sep + files[i]);
           if (!_.has(result, tmpPath)) {
@@ -73,12 +72,14 @@ module.exports = function (grunt) {
   }
 
   // A method for changing the remote working directory and creating one if it doesn't already exist
-  function ftpCwd (inPath, cb) {
-    ftp.raw.cwd(inPath, function (err) {
-      if(err){
-        ftp.raw.mkd(inPath, function (err) {
-          if(err) {
-            log.error('Error creating new remote folder ' + inPath + ' --> ' + err);
+  function ftpCwd(inPath, cb) {
+    ftp.raw('cwd', inPath, function(err) {
+      if (err) {
+        ftp.raw('mkd', inPath, function(err) {
+          if (err) {
+            log.error(
+              'Error creating new remote folder ' + inPath + ' --> ' + err
+            );
             cb(err);
           } else {
             log.ok('New remote folder created ' + inPath.yellow);
@@ -92,17 +93,23 @@ module.exports = function (grunt) {
   }
 
   // A method for uploading a single file
-  function ftpPut (inFilename, done) {
-    var fpath = path.normalize(localRoot + path.sep + currPath + path.sep + inFilename);
-    ftp.put(fpath, inFilename, function (err) {
+  function ftpPut(inFilename, done) {
+    var fpath = path.normalize(
+      localRoot + path.sep + currPath + path.sep + inFilename
+    );
+    ftp.put(fpath, inFilename, function(err) {
       if (err) {
         log.error('Cannot upload file: ' + inFilename + ' --> ' + err);
         done(err);
       } else {
         if (forceVerbose) {
-          log.ok('Uploaded file: ' + inFilename.green + ' to: ' + currPath.yellow);
+          log.ok(
+            'Uploaded file: ' + inFilename.green + ' to: ' + currPath.yellow
+          );
         } else {
-          verbose.ok('Uploaded file: ' + inFilename.green + ' to: ' + currPath.yellow);
+          verbose.ok(
+            'Uploaded file: ' + inFilename.green + ' to: ' + currPath.yellow
+          );
         }
         done(null);
       }
@@ -110,28 +117,31 @@ module.exports = function (grunt) {
   }
 
   // A method that processes a location - changes to a folder and uploads all respective files
-  function ftpProcessLocation (inPath, cb) {
+  function ftpProcessLocation(inPath, cb) {
     if (!toTransfer[inPath]) {
       cb(new Error('Data for ' + inPath + ' not found'));
     }
 
-    ftpCwd(path.normalize('/' + remoteRoot + '/' + inPath).replace(/\\/gi, '/'), function (err) {
-      var files;
+    ftpCwd(
+      path.normalize('/' + remoteRoot + '/' + inPath).replace(/\\/gi, '/'),
+      function(err) {
+        var files;
 
-      if (err) {
-        grunt.warn('Could not switch to remote folder!');
-      }
-
-      currPath = inPath;
-      files = toTransfer[inPath];
-
-      async.eachSeries(files, ftpPut, function (err) {
         if (err) {
-          grunt.warn('Failed uploading files!');
+          grunt.warn('Could not switch to remote folder!');
         }
-        cb(null);
-      });
-    });
+
+        currPath = inPath;
+        files = toTransfer[inPath];
+
+        async.eachSeries(files, ftpPut, function(err) {
+          if (err) {
+            grunt.warn('Failed uploading files!');
+          }
+          cb(null);
+        });
+      }
+    );
   }
 
   function getAuthVals(inAuth) {
@@ -141,7 +151,12 @@ module.exports = function (grunt) {
     // If authentication values are provided in the grunt file itself
     var username = inAuth.username;
     var password = inAuth.password;
-    if (typeof username != 'undefined' && username != null && typeof password != 'undefined' && password != null) {
+    if (
+      typeof username != 'undefined' &&
+      username != null &&
+      typeof password != 'undefined' &&
+      password != null
+    ) {
       return {
         username: username,
         password: password
@@ -149,20 +164,24 @@ module.exports = function (grunt) {
     }
 
     // If values are provided from environment variables
-    if (process.env[inAuth.authKey]) return JSON.parse(process.env[inAuth.authKey]);
+    if (process.env[inAuth.authKey])
+      return JSON.parse(process.env[inAuth.authKey]);
 
     // If there is a valid auth file provided
     if (fs.existsSync(authFile)) {
       tmpData = JSON.parse(grunt.file.read(authFile));
       if (inAuth.authKey) return tmpData[inAuth.authKey] || {};
       if (inAuth.host) return tmpData[inAuth.host] || {};
-    } else if (inAuth.authKey) grunt.warn('\'authKey\' configuration provided but no valid \'.ftppass\' file found!');
+    } else if (inAuth.authKey)
+      grunt.warn(
+        "'authKey' configuration provided but no valid '.ftppass' file found!"
+      );
 
     return {};
   }
 
   // The main grunt task
-  grunt.registerMultiTask('ftp-deploy', 'Deploy code over FTP', function () {
+  grunt.registerMultiTask('ftp-deploy', 'Deploy code over FTP', function() {
     var done = this.async();
 
     // Init
@@ -173,7 +192,9 @@ module.exports = function (grunt) {
     });
 
     localRoot = Array.isArray(this.data.src) ? this.data.src[0] : this.data.src;
-    remoteRoot = Array.isArray(this.data.dest) ? this.data.dest[0] : this.data.dest;
+    remoteRoot = Array.isArray(this.data.dest)
+      ? this.data.dest[0]
+      : this.data.dest;
     authVals = getAuthVals(this.data.auth);
     exclusions = this.data.exclusions || [];
     ftp.useList = true;
@@ -181,10 +202,10 @@ module.exports = function (grunt) {
     forceVerbose = this.data.forceVerbose === true ? true : false;
 
     // Getting all the necessary credentials before we proceed
-    var needed = {properties: {}};
+    var needed = { properties: {} };
     if (!authVals.username) needed.properties.username = {};
-    if (!authVals.password) needed.properties.password = {hidden:true};
-    prompt.get(needed, function (err, result) {
+    if (!authVals.password) needed.properties.password = { hidden: true };
+    prompt.get(needed, function(err, result) {
       if (err) {
         grunt.warn('Authentication ' + err);
       }
@@ -192,15 +213,15 @@ module.exports = function (grunt) {
       if (result.password) authVals.password = result.password;
 
       // Authentication and main processing of files
-      ftp.auth(authVals.username, authVals.password, function (err) {
+      ftp.auth(authVals.username, authVals.password, function(err) {
         var locations = _.keys(toTransfer);
         if (err) {
           grunt.warn('Authentication ' + err);
         }
 
         // Iterating through all location from the `localRoot` in parallel
-        async.eachSeries(locations, ftpProcessLocation, function () {
-          ftp.raw.quit(function (err) {
+        async.eachSeries(locations, ftpProcessLocation, function() {
+          ftp.raw('quit', function(err) {
             if (err) {
               log.error(err);
             } else {
